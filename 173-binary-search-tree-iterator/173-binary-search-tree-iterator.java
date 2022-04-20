@@ -14,25 +14,24 @@
  * }
  */
 class BSTIterator {
-     Stack<TreeNode> st;
+     Queue<Integer> qu;
     public BSTIterator(TreeNode root) {
-        st = new Stack<>();
-        addAllLeft(root);
+        qu=new LinkedList<>();
+        inOrder(root);
     }
-    public void addAllLeft(TreeNode root){
-        while(root != null){
-            st.push(root);
-            root = root.left;
-        }
+    public void inOrder(TreeNode root){
+      if(root==null)return;
+      inOrder(root.left);
+      qu.add(root.val);
+      inOrder(root.right);
     }
+    
     public int next() {
-        TreeNode topValue = st.pop();
-        addAllLeft(topValue.right);
-        return topValue.val;
+        return qu.remove();
     }
     
     public boolean hasNext() {
-        return st.size() != 0;
+        return !qu.isEmpty();
     }
 }
 
