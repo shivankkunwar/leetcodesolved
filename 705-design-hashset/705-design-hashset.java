@@ -1,22 +1,20 @@
 class MyHashSet {
-    ArrayList<Integer> ans= new ArrayList<>();
+  int size = (int)Math.pow(10, 6)+1;
+	boolean[] flag;
     public MyHashSet() {
-        ans=new ArrayList<Integer>();
-    }
+		flag = new boolean[size];
+	}
     
     public void add(int key) {
-          if(!ans.contains(key))
-                 ans.add(key);
+        flag[key]=true;
     }
     
     public void remove(int key) {
-            if(ans.contains(key))
-                ans.remove(ans.indexOf(key));
+        flag[key]=false;
     }
     
     public boolean contains(int key) {
-        if(!ans.contains(key))return false;
-        else return true;
+        return flag[key];
     }
 }
 
