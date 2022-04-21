@@ -1,20 +1,20 @@
 class MyHashSet {
   int size = (int)Math.pow(10, 6)+1;
-	boolean isAvailable[];
+	boolean[] flag;
     public MyHashSet() {
-        isAvailable = new boolean[1000001];
-    }
+		flag = new boolean[size];
+	}
     
     public void add(int key) {
-        isAvailable[key] = true;
+        flag[key]=true;
     }
     
     public void remove(int key) {
-        isAvailable[key] = false;
+        flag[key]=false;
     }
     
     public boolean contains(int key) {
-        return isAvailable[key];
+        return flag[key];
     }
 }
 
