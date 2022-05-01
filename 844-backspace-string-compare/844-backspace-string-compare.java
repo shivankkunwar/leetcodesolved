@@ -1,26 +1,16 @@
 class Solution {
     public boolean backspaceCompare(String s, String t) {
-        String ans1=stringify(s);
-        String ans2=stringify(t);
-        if(ans1.compareTo(ans2)==0)return true;
-        else return false;
-    
+       return build(s).equals(build(t));
     }
-    public String stringify(String s){
-        Stack<Character> stack= new Stack<Character>();
-        String Ans="";
-        for(char ch:s.toCharArray()){
-           if(ch!='#'){
-               stack.push(ch);
-           } 
-            else{
-                if(!stack.empty())stack.pop();
-            }
+
+    public String build(String S) {
+        Stack<Character> ans = new Stack();
+        for (char c: S.toCharArray()) {
+            if (c != '#')
+                ans.push(c);
+            else if (!ans.empty())
+                ans.pop();
         }
-        while(!stack.empty()){
-                Ans=Ans+stack.pop();
-                    
-        }
-        return Ans;
+        return String.valueOf(ans);
     }
     }
