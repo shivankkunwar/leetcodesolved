@@ -1,6 +1,6 @@
 class Solution {
   public static int count(int idx,int num,int n,int[][] dp){
-        if(idx==0 && num==n)
+        if(idx==0 )
         return 1;
         if(idx<0 || num>n)
         return 0;
