@@ -1,25 +1,24 @@
 class Solution {
-   public static int countVowelStrings(int n) {
+  public static int count(int idx,int num,int n,int[][] dp){
+        if(idx==0 && num==n)
+        return 1;
+        if(idx<0 || num>n)
+        return 0;
+        if(dp[idx][num]!=-1)
+            return dp[idx][num];
+        int pick = count(idx,num+1,n,dp);
+        int nopick = count(idx-1,num,n,dp);
+        return dp[idx][num] = pick+nopick;
+    }
 
-    int[][] Dp=new int[n+1][5];
-        for(int i=0;i<n+1;i++){
-            for( int j=0;j<5;j++){
+    public static int countVowelStrings(int n) {
+        int [][]Dp=new int[5][n+1];
+        for(int i=0;i<5;i++){
+            for( int j=0;j<n+1;j++){
                 Dp[i][j]=-1;
             }
         }
-      return (count(n,0,Dp));
-
-
-    }
-    public static  int count(int n,int Last,int[][]Dp){
-        if(n==0)return 1;
-        int ans=0;
-        if(Dp[n][Last]!=-1)return Dp[n][Last];
-        for( int i=Last;i<5;i++){
-            ans+=count(n-1,i,Dp);
-        }
-
-        return Dp[n][Last]=ans ;
+        return count(4,0,n,Dp);
     }
     
 }
