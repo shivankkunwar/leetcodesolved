@@ -1,47 +1,28 @@
 class Solution {
-   static class Node{
-    int x;
-    int y;
-    int dist;
-    Node(int x,int y,int dist){
-        this.x=x;
-        this.y=y;
-        this.dist=dist;
-    }
-}
-public int shortestPathBinaryMatrix(int[][] grid) {
-     int row=grid.length;
-     int cols=grid[0].length;
-    if(grid[0][0]==1 || grid[row-1][cols-1]==1)
-        return -1;
-    int [][] direction={
-        {0,1},{1,0},{-1,0},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}   
-    };
-    Queue<Node> queue=new LinkedList<>();
-    queue.add(new Node(0,0,1));
-    grid[0][0]=1;
-    while(!queue.isEmpty()){
-        int size=queue.size();
-        for(int i=0;i<size;i++){
-            Node temp=queue.poll();
-            int x=temp.x;
-            int y=temp.y;
-            int cost=temp.dist;
-            if(x==row-1 && y==cols-1)
-                return cost;
-            
-            for(int [] ways:direction){
-                int nextX=x+ways[0];
-                int nextY=y+ways[1];
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        if(grid[0][0]==1)return -1;
+        int m=grid.length;
+        Queue<int[]> q= new LinkedList<>();
+        q.add(new int[]{0,0,1});
+        grid[0][0]=1;
+        int[][] dir={{0,1},{1,0},{0,-1},{-1,0},{-1,-1},{1,1},{1,-1},{-1,1}};
+        while(!q.isEmpty()){
+            int size=q.size();
+            while(size-->0){
                 
-                if(nextX>=0 && nextX<row && nextY>=0 && nextY<cols && grid[nextX][nextY]==0){
-                    queue.add(new Node(nextX,nextY,cost+1));
-                    grid[nextX][nextY]=1;
+                int[] point=q.poll();
+                if(point[0]==m-1&&point[1]==m-1)return point[2];
+                for(int [] d: dir){
+                    int r=point[0]+d[0];
+                    int c=point[1]+d[1];
+                    
+                    if(r>=0&&c>=0&&r<m&&c<m&&grid[r][c]==0){
+                        q.add(new int[]{r,c,point[2]+1});
+                        grid[r][c]=1;
+                    }
                 }
             }
         }
+        return -1;
     }
-    return -1;
-    
-}
 }
