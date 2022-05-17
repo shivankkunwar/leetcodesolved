@@ -1,27 +1,24 @@
 class Solution {
     
-    public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        List<List<Integer>> Outer= new ArrayList<List<Integer>>();
-        List<Integer> inner= new ArrayList<>();
-        helper(candidates,target,Outer,inner,0,0);
-        return Outer;
- }
-    public void helper(int [] arr,int target,List<List<Integer>> outer,List<Integer> inner,int i,int sum){
-           if(sum>target)return;
-          if(sum==target){
-              outer.add(new ArrayList<>(inner));
-              return;
-          }
-       for(int a=i;a<arr.length;a++){
-          
-           sum+=arr[a];
-            inner.add(arr[a]);
-           helper(arr,target,outer,inner,a,sum);   
-            sum-=arr[a];
-           inner.remove(inner.size()-1);
-       }
+     public void subSequence(int[] A, List<List<Integer>> res, List<Integer> li, int i, int tar) {
+        if (i == A.length) {
+            if (tar == 0) res.add(new ArrayList<>(li));
+            return;
+        }
+        if (A[i] <= tar) { // picked
+            li.add(A[i]);
+            subSequence(A, res, li, i, tar - A[i]);
+            li.remove(li.size() - 1);
+        }
+        subSequence(A, res, li, i + 1, tar); // not picked
+    }
+    public List<List<Integer>> combinationSum(int[] A, int tar) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> li = new ArrayList<>();
+        subSequence(A, res, li, 0, tar);
+        return res;
+    }
       
     }
     
     
-}
