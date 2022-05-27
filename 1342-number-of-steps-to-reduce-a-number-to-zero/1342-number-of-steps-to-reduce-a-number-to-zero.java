@@ -1,12 +1,18 @@
 class Solution {
-    public int numberOfSteps(int num) {
-        int count=0;
-        while(num!=0){
-             if((num&1)==0)num=num>>1;
-            else num--;
-            count++;
-            
+        public  int numberOfSteps(int num){
+        return helper(num,0);
+    }
+    private static int helper(int num,int c){
+        if(num ==0){
+            return c;
         }
-       return count;
+        if(num%2==0){
+            c++;
+            return helper(num/2,c);
+        }
+        else{
+            c++;
+            return helper(num-1,c);
+        }
     }
 }
