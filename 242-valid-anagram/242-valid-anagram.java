@@ -1,18 +1,16 @@
 class Solution {
     public static Boolean isAnagram(String s1,String s2){
-       
-        if(helper(s1).equals(helper(s2)))return true;
-        return false;
-    }
-    public static HashMap helper(String s){
-        HashMap<Character,Integer> ans= new HashMap<>();
-        for( char ch:s.toCharArray()){
-            if(!ans.containsKey(ch)){
-                ans.put(ch,1);
-            }else{
-                ans.put(ch,ans.get(ch)+1);
-            }
+     if(s1.length()!=s2.length())return false;
+        int [] helper= new int[26];
+
+        for(int i=0;i<s1.length();i++){
+            
+            helper[s1.charAt(i)-'a']++;
+            helper[s2.charAt(i)-'a']--;
+
         }
-        return ans;
-    }
+        for(int n:helper){
+            if(n!=0)return false;
+        }
+        return true;}
 }
