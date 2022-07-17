@@ -14,23 +14,23 @@
  * }
  */
 class Solution {
-    int ans=0;
+    public int max=0;
     public int diameterOfBinaryTree(TreeNode root) {
-        if(root==null )return 0;
-        height(root);
-        return ans;
+        if(root!=null){
+               
+           lengther(root);
+        }
+        return max;
     }
-    
-    public int height(TreeNode root){
-        //if root==null height==0
-        if(root==null)return -1;
-        
-        int L=height(root.left);
-        int R=height(root.right);
-        //ans signfies(no. of nodes farthest apart) or the DIAMETER
-        ans=Math.max(ans,L+R+2);
-        //height of the tree is max of LST & RST +1
-        return 1+Math.max(L,R);
+    public int lengther(TreeNode root){
+        if(root!=null){
+                int left=lengther(root.left);
+                int right=lengther(root.right);
+                 max=Math.max(max,left+right);
+                return 1+Math.max(left,right);
+            }
+        return 0;
     }
+   
     
 }
