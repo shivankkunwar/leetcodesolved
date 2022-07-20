@@ -1,27 +1,40 @@
 class Solution {
-    public int ans=0;
-    public int numMatchingSubseq(String S, String[] words) {
-       Map<Character, Deque<String>> map = new HashMap<>();
-        for (char c = 'a'; c <= 'z'; c++) {
-            map.putIfAbsent(c, new LinkedList<String>());
+  
+        class Item {
+        String word;
+        int index;
+        public Item (String s, int i) {
+            word = s;
+            index = i;
         }
-        for (String word : words) {
-            map.get(word.charAt(0)).addLast(word);
+    }
+    public int numMatchingSubseq(String S, String[] words) {
+        Queue<Item>[] dict = new Queue[26];
+        for (int i = 0; i < dict.length; i++) {
+            dict[i] = new LinkedList<>();
+        }
+
+        for (String word :words) {
+            if (word.length() > 0) {
+                dict[word.charAt(0) - 'a'].add(new Item(word, 0));
+            }
         }
 
         int count = 0;
         for (char c : S.toCharArray()) {
-            Deque<String> queue = map.get(c);
+            Queue<Item> queue = dict[c - 'a'];
             int size = queue.size();
             for (int i = 0; i < size; i++) {
-                String word = queue.removeFirst();
-                if (word.length() == 1) {
+                Item top = queue.remove();
+                top.index++;
+                if (top.index == top.word.length()) {
                     count++;
                 } else {
-                    map.get(word.charAt(1)).addLast(word.substring(1));
+                    dict[top.word.charAt(top.index) - 'a'].add(top);
                 }
             }
         }
+
         return count;
     }
-}
+    }
