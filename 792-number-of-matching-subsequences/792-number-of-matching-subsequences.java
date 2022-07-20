@@ -1,41 +1,35 @@
 class Solution {
    public int numMatchingSubseq(String s, String[] words) {
-           Word[] heads = new Word[26];
-        for (int i = 0; i < 26; i++) heads[i] = new Word("", 0);
-        for (String word : words) {
-            Word head = heads[word.charAt(0) - 'a'];
-            Word newWord = new Word(word, 0);
-            newWord.next = head.next;
-            head.next = newWord;
+  //put all the character in string s in a hashmap
+        HashMap<Character, Queue<String>> map= new HashMap<>();
+        int ans=0;
+        for(int i=0;i<s.length();i++){
+            map.putIfAbsent(s.charAt(i),new LinkedList<>());
         }
-        int ans = 0;
-        for (char c : s.toCharArray()) {
-            Word curHead = heads[c - 'a'];
-            Word cur = curHead.next;
-            curHead.next = null;
-            while (cur != null) {
-                Word next = cur.next;
-                if (cur.index == cur.word.length() - 1) {
-                    ans++;
-                } else {
-                    cur.index++;
-                    Word nextHead = heads[cur.word.charAt(cur.index) - 'a'];
-                    cur.next = nextHead.next;
-                    nextHead.next = cur;
-                }
-                cur = next;
+        //put all the string from array which starts with the starting character from map
+        for(String word:words){
+            char start= word.charAt(0);
+            if(map.containsKey(start)){
+                map.get(start).offer(word);
             }
         }
-        return ans;
-    }
-    
-    class Word {
-        String word;
-        int index;
-        Word next;
-        Word(String word, int index) {
-            this.word = word;
-            this.index = index;
+        // at every traversal character of s and take every strings that start with that character
+        // and remove the character from strings in queue and if its empty update ans
+        for(int i=0;i<s.length();i++){
+            char start=s.charAt(i);
+            Queue<String> q= map.get(start);
+            int size=q.size();
+            for(int k=0;k<size;k++){
+                String str=q.poll();
+                if(str.substring(1).length()==0){
+                    ans++;
+                }else{
+                    if(map.containsKey(str.charAt(1)))
+                    {
+                        map.get(str.charAt(1)).add(str.substring(1));
+                    }
+                }
+            }
         }
-    }
-}
+       return ans;
+}}
