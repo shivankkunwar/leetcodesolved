@@ -1,60 +1,78 @@
 class Solution {
-    int[] dr = new int[]{-1, 0, 1, 0};
-    int[] dc = new int[]{0, -1, 0, 1};
-    int[][] grid;
-    int N;
-
+    
+    static int[] islandAreas = new int[500 * 500];
+    int islandIdx;
+    int rowLast;
+    int colLast;
+    
     public int largestIsland(int[][] grid) {
-        this.grid = grid;
-        N = grid.length;
+        islandIdx = 2;
+        islandAreas[2] = 0;
+        rowLast = grid.length - 1;
+        colLast = grid[0].length - 1;
 
-        int index = 2;
-        int[] area = new int[N*N + 2];
-        for (int r = 0; r < N; ++r)
-            for (int c = 0; c < N; ++c)
-                if (grid[r][c] == 1)
-                    area[index] = dfs(r, c, index++);
-
-        int ans = 0;
-        for (int x: area) ans = Math.max(ans, x);
-        for (int r = 0; r < N; ++r)
-            for (int c = 0; c < N; ++c)
-                if (grid[r][c] == 0) {
-                    Set<Integer> seen = new HashSet();
-                    for (Integer move: neighbors(r, c))
-                        if (grid[move / N][move % N] > 1)
-                            seen.add(grid[move / N][move % N]);
-
-                    int bns = 1;
-                    for (int i: seen) bns += area[i];
-                    ans = Math.max(ans, bns);
+        // Find the area of all islands and assign each island an index number 2..n
+        for (int r = 0; r <= rowLast; r++) {
+            int[] row = grid[r];
+            for (int c = 0; c <= colLast; c++) {
+                if (row[c] == 1) {
+                    islandAreas[islandIdx] = 
+                        findIslandArea(grid, r, c);
+                    islandIdx++;
                 }
-
-        return ans;
-    }
-
-    public int dfs(int r, int c, int index) {
-        int ans = 1;
-        grid[r][c] = index;
-        for (Integer move: neighbors(r, c)) {
-            if (grid[move / N][move % N] == 1) {
-                grid[move / N][move % N] = index;
-                ans += dfs(move / N, move % N, index);
             }
         }
-
-        return ans;
-    }
-
-    public List<Integer> neighbors(int r, int c) {
-        List<Integer> ans = new ArrayList();
-        for (int k = 0; k < 4; ++k) {
-            int nr = r + dr[k];
-            int nc = c + dc[k];
-            if (0 <= nr && nr < N && 0 <= nc && nc < N)
-                ans.add(nr * N + nc);
+        
+        // Check all the 0's in the grid to see how much area they could connect.
+        int maxArea = islandAreas[2];       // Just in case there are no 0's in the grid.
+        for (int r = 0; r <= rowLast; r++) {
+            int[] row = grid[r];
+            for (int c = 0; c <= colLast; c++) {
+                if (row[c] == 0) {
+                    int area = 1;
+                    int idxUp = 0;
+                    int idxLeft = 0;
+                    int idxDown = 0;
+                    if (r > 0) {
+                        int idx = grid[r - 1][c];
+                        if (idx > 0) {
+                            area += islandAreas[idx];
+                            idxUp = idx;
+                        }
+                    }
+                    if (c > 0) {
+                        int idx = row[c - 1];
+                        if (idx > 0 && idx != idxUp) {
+                            area += islandAreas[idx];
+                            idxLeft = idx;
+                        }
+                    }
+                    if (r < rowLast) {
+                        int idx = grid[r + 1][c];
+                        if (idx > 0 && idx != idxUp && idx != idxLeft) {
+                            area += islandAreas[idx];
+                            idxDown = idx;
+                        }
+                    }
+                    if (c < colLast) {
+                        int idx = row[c + 1];
+                        if (idx > 0 && idx != idxUp && idx != idxLeft && idx != idxDown)
+                            area += islandAreas[idx];
+                    }
+                    if (area > maxArea)  maxArea = area;
+                }
+            }
         }
-
-        return ans;
+        return maxArea;
+    }
+    
+    private int findIslandArea(int[][] grid, int r, int c) {
+        int area = 1;
+        grid[r][c] = islandIdx;
+        if (r > 0 && grid[r - 1][c] == 1)  area += findIslandArea(grid, r - 1, c);
+        if (c > 0 && grid[r][c - 1] == 1)  area += findIslandArea(grid, r, c - 1);
+        if (r < rowLast && grid[r + 1][c] == 1)  area += findIslandArea(grid, r + 1, c);
+        if (c < colLast && grid[r][c + 1] == 1)  area += findIslandArea(grid, r, c + 1);
+        return area;
     }
 }
