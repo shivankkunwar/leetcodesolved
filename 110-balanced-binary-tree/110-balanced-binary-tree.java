@@ -14,7 +14,6 @@
  * }
  */
 class Solution {
-   public  boolean Flag=true;
     public boolean isBalanced(TreeNode root) {
       
            return heighter(root)==-1?false:true;
