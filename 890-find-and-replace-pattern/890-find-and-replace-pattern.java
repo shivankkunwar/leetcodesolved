@@ -9,19 +9,27 @@ class Solution {
     public boolean helper(String str,String pattern){
         if(str.length()!=pattern.length())return false;
         HashMap<Character,Character> check= new HashMap<>();
-        HashMap<Character,Integer> strcheck= new HashMap<>();
+    
         for( int i=0;i<pattern.length();i++){
            
             if(!check.containsKey(pattern.charAt(i))){
-                    if(strcheck.containsKey(str.charAt(i)))return false;
+                   
                     check.put(pattern.charAt(i),str.charAt(i));
-                    strcheck.put(str.charAt(i),0);
+                    
                 }
             else{
                 if(str.charAt(i)!=check.get(pattern.charAt(i))){
                     return false;    
                 }
             }
+        }
+        
+        boolean[] seen= new boolean[26];
+        for(char ch:check.values()){
+            if(seen[ch-'a'])return false;
+            seen[ch-'a']= true;
+            
+            
         }
         return true;
     }
