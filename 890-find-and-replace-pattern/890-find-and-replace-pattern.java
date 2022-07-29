@@ -9,13 +9,13 @@ class Solution {
     public boolean helper(String str,String pattern){
         if(str.length()!=pattern.length())return false;
         HashMap<Character,Character> check= new HashMap<>();
-        HashSet<Character> strcheck= new HashSet<>();
+        HashMap<Character,Integer> strcheck= new HashMap<>();
         for( int i=0;i<pattern.length();i++){
            
             if(!check.containsKey(pattern.charAt(i))){
-                    if(strcheck.contains(str.charAt(i)))return false;
+                    if(strcheck.containsKey(str.charAt(i)))return false;
                     check.put(pattern.charAt(i),str.charAt(i));
-                    strcheck.add(str.charAt(i));
+                    strcheck.put(str.charAt(i),0);
                 }
             else{
                 if(str.charAt(i)!=check.get(pattern.charAt(i))){
