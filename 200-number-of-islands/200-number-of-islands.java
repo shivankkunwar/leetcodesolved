@@ -7,10 +7,12 @@ class Solution {
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[i].length;j++){
 
-                if(grid[i][j]=='1')ans++;
+                if(grid[i][j]=='1'){
+                    ans++;
+                    dfs(grid,i,j);
 
-                dfs(grid,i,j);
-
+                }
+                
             }
         }
         return ans;
@@ -25,3 +27,4 @@ class Solution {
         dfs(grid,i,j-1);
     }
 }
+// 
