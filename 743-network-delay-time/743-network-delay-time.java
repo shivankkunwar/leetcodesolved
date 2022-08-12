@@ -23,71 +23,57 @@ class Entry{
     }
 }
 class Solution {
-      // Adjacency list
-    Map<Integer, List<Pair<Integer, Integer>>> adj = new HashMap<>();
+    public int networkDelayTime(int[][] times, int n, int src) {
+        Map<Integer,List<NodePair>> adj=new HashMap<>();
+        for(int [] edge:times){
+            adj.computeIfAbsent(edge[0],f->new ArrayList<>()).add(new NodePair(edge[1],edge[2]));
+            
+            
+        }
+        
+        int dist[]= dikstraPQ(adj,src,n);
+        int ans=0;
+       for( int i=1;i<dist.length;i++){
+            if(dist[i]==Integer.MAX_VALUE)return -1;
+            ans=Math.max(ans,dist[i]);
+       }
+           
+        
+        return ans;
+        
+        }
     
-    private void dijkstra(int[] signalReceivedAt, int source, int n) {
-        Queue<Pair<Integer, Integer>> pq = new PriorityQueue<Pair<Integer,Integer>>
-            (Comparator.comparing(Pair::getKey));
-        pq.add(new Pair(0, source));
-        
-        // Time for starting node is 0
-        signalReceivedAt[source] = 0;
-        
-        while (!pq.isEmpty()) {
-            Pair<Integer, Integer> topPair = pq.remove();
+        public int[] dikstraPQ(Map<Integer,List<NodePair>> adj,int src ,int n){
             
-            int currNode = topPair.getValue();
-            int currNodeTime = topPair.getKey();
+            int[] distance= new int[n+1];
+            Arrays.fill(distance,Integer.MAX_VALUE);
+            boolean visited[]= new boolean[n+1];
+            distance[src]=0;
+            PriorityQueue<Entry> pq= new PriorityQueue<>((e1,e2)->e1.weight-e2.weight);
+            pq.add(new Entry(src,0));
             
-            if (currNodeTime > signalReceivedAt[currNode]) {
-                continue;
-            }
-            
-            if (!adj.containsKey(currNode)) {
-                continue;
-            }
-            
-            // Broadcast the signal to adjacent nodes
-            for (Pair<Integer, Integer> edge : adj.get(currNode)) {
-                int time = edge.getKey();
-                int neighborNode = edge.getValue();
+            while(!pq.isEmpty()){
+                Entry currEntry=pq.poll();
+                int currNode= currEntry.node;
+                if(visited[currNode])continue;
+                visited[currNode]=true;
                 
-                // Fastest signal time for neighborNode so far
-                // signalReceivedAt[currNode] + time : 
-                // time when signal reaches neighborNode
-                if (signalReceivedAt[neighborNode] > currNodeTime + time) {
-                    signalReceivedAt[neighborNode] = currNodeTime + time;
-                    pq.add(new Pair(signalReceivedAt[neighborNode], neighborNode));
+                for(NodePair Node2: adj.computeIfAbsent(currNode,f->new ArrayList<NodePair>())){
+                    int adjacentNode= Node2.node2;
+                    int weight= Node2.weight;
+                    
+                    if(distance[currNode]+weight<distance[adjacentNode]){
+                        distance[adjacentNode]=distance[currNode]+weight;
+                        pq.add(new Entry(adjacentNode,distance[adjacentNode]));
+                    }
                 }
+                
+                
             }
-        }
-    }
-    
-    public int networkDelayTime(int[][] times, int n, int k) {
-        // Build the adjacency list
-        for (int[] time : times) {
-            int source = time[0];
-            int dest = time[1];
-            int travelTime = time[2];
             
-            adj.putIfAbsent(source, new ArrayList<>());
-            adj.get(source).add(new Pair(travelTime, dest));
+            return distance;
         }
-        
-        int[] signalReceivedAt = new int[n + 1];
-        Arrays.fill(signalReceivedAt, Integer.MAX_VALUE);
-        
-        dijkstra(signalReceivedAt, k, n);
-        
-        int answer = Integer.MIN_VALUE;
-        for (int i = 1; i <= n; i++) {
-            answer = Math.max(answer, signalReceivedAt[i]);
-        }
-        
-        // INT_MAX signifies atleat one node is unreachable
-        return answer == Integer.MAX_VALUE ? -1 : answer;
-    }
+         
     }
 //         Map<Integer,List<NodePair>> adj= new HashMap<>();
         
