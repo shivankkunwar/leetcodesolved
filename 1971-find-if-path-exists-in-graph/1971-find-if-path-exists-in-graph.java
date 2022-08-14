@@ -1,35 +1,31 @@
 class Solution {
    
-    public boolean validPath(int n, int[][] edges, int source, int destination) {
-        Map<Integer,List<Integer>> adj= new HashMap<>();
-        
-        for(int i=0;i<edges.length;i++){
-                makeAd(adj,edges[i][0],edges[i][1]);
+    public boolean validPath(int n, int[][] edges, int start, int end) {
+         ArrayList<Integer>[] graph = new ArrayList[n];
+        for(int i = 0; i < n; i++){
+            graph[i] = new ArrayList<>();
+        }        
+        for(int[] edge : edges){
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
         }
-        boolean[] visited= new boolean[n];
-        Queue<Integer> q= new LinkedList<>();
-        q.add(source);
-        while(!q.isEmpty()){
-            int sz=q.size();
-            while(sz-->0){
-                 int currNode=q.poll();
-                if(currNode==destination)return true;
-                 for(int nextNode: adj.get(currNode)){
-                     
-                     if(!visited[nextNode]){
-                            q.add(nextNode);
-                            visited[nextNode]=true;
-                    }
-                 }
+		
+		
+		
+        boolean[] visited = new boolean[n];
+        Stack<Integer> stack= new Stack<Integer>();
+        stack.add(start);
+         visited[start] = true;
+        while (!stack.isEmpty()) {
+            int current = stack.pop();
+            if (current == end) return true;
+            for (int neighbor : graph[current]) {
+                if (!visited[neighbor]) {
+                     visited[neighbor] = true;
+                    stack.add(neighbor);
+                }
             }
-          
-            
         }
-        return false;
-    }
-    public static void makeAd(Map<Integer,List<Integer>> ad,int u,int v){
-        ad.computeIfAbsent(u,f->new ArrayList<>()).add(v);
-        ad.computeIfAbsent(v,f->new ArrayList<>()).add(u);
-      
+        return false;      
     }
 }
