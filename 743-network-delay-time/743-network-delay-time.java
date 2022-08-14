@@ -47,24 +47,30 @@ class Solution {
             
             int[] distance= new int[n+1];
             Arrays.fill(distance,Integer.MAX_VALUE);
-            boolean visited[]= new boolean[n+1];
-            distance[src]=0;
-            PriorityQueue<Entry> pq= new PriorityQueue<>((e1,e2)->e1.weight-e2.weight);
-            pq.add(new Entry(src,0));
             
-            while(!pq.isEmpty()){
-                Entry currEntry=pq.poll();
-                int currNode= currEntry.node;
-                if(visited[currNode])continue;
-                visited[currNode]=true;
+            distance[src]=0;
+            TreeSet<Integer> set= new TreeSet<>((node1,node2)->{
+                                                                if(distance[node1]==distance[node2])
+                                                                    return node1-node2;
+                                                                return distance[node1]-distance[node2];
+                
+            });
+            set.add(src);
+            
+            while(!set.isEmpty()){
+               
+                int currNode= set.pollFirst();
+
                 
                 for(NodePair Node2: adj.computeIfAbsent(currNode,f->new ArrayList<NodePair>())){
                     int adjacentNode= Node2.node2;
                     int weight= Node2.weight;
                     
                     if(distance[currNode]+weight<distance[adjacentNode]){
+                        
+                        set.remove(adjacentNode);
                         distance[adjacentNode]=distance[currNode]+weight;
-                        pq.add(new Entry(adjacentNode,distance[adjacentNode]));
+                        set.add(adjacentNode);
                     }
                 }
                 
@@ -75,6 +81,36 @@ class Solution {
         }
          
     }
+// public int[] dikstraPQ(Map<Integer,List<NodePair>> adj,int src ,int n){
+            
+//             int[] distance= new int[n+1];
+//             Arrays.fill(distance,Integer.MAX_VALUE);
+//             boolean visited[]= new boolean[n+1];
+//             distance[src]=0;
+//             PriorityQueue<Entry> pq= new PriorityQueue<>((e1,e2)->e1.weight-e2.weight);
+//             pq.add(new Entry(src,0));
+            
+//             while(!pq.isEmpty()){
+//                 Entry currEntry=pq.poll();
+//                 int currNode= currEntry.node;
+//                 if(visited[currNode])continue;
+//                 visited[currNode]=true;
+                
+//                 for(NodePair Node2: adj.computeIfAbsent(currNode,f->new ArrayList<NodePair>())){
+//                     int adjacentNode= Node2.node2;
+//                     int weight= Node2.weight;
+                    
+//                     if(distance[currNode]+weight<distance[adjacentNode]){
+//                         distance[adjacentNode]=distance[currNode]+weight;
+//                         pq.add(new Entry(adjacentNode,distance[adjacentNode]));
+//                     }
+//                 }
+                
+                
+//             }
+            
+//             return distance;
+//         }
 //         Map<Integer,List<NodePair>> adj= new HashMap<>();
         
 //         for(int [] edge:times){
