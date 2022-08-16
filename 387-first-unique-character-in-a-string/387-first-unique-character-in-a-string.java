@@ -1,22 +1,12 @@
 class Solution {
     public int firstUniqChar(String s) {
-          int[] answer= new int[26];
-        for(char ch:s.toCharArray()){
-            answer[ch-'a']++;
+         int res = s.length();
+        for (char ch = 'a'; ch <= 'z'; ch++) {
+            int index = s.indexOf(ch);
+            if (index != -1 && index == s.lastIndexOf(ch))
+                res = Math.min(res, index);
         }
-        ArrayList<Integer> ans= new ArrayList<>();
-
-        for(int i=0;i<26;i++){
-            if(answer[i]==1){
-                ans.add(i);
-
-            }
-        }
-        if(ans.size()==0)return -1;
-        int first=Integer.MAX_VALUE;
-        for(int pos:ans){
-            first=Math.min(first,s.indexOf(pos+'a'));
-        }
-        return first;
+        
+        return res == s.length() ? -1 : res;
     }
 }
