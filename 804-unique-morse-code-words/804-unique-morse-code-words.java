@@ -14,10 +14,11 @@ class Solution {
         return sett.size();
     }
     public String getMorse(String s){
-        String morsed="";
-        for(char ch:s.toCharArray() ){
-            morsed+=morse[ch-'a'];
+      StringBuilder sb = new StringBuilder();
+        
+        for( char ch:s.toCharArray()){
+            sb.append(morse[ch-'a']);
         }
-        return morsed;
+        return sb.toString();
     }
 }
