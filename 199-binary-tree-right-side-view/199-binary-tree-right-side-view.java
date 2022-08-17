@@ -14,16 +14,21 @@
  * }
  */
 class Solution {
-    public static List<Integer> ans;
+    public List<Integer> ans;
+    public int maxLevel=0;
     public List<Integer> rightSideView(TreeNode root) {
         ans=new ArrayList<>();
-        helper(root,0);
+        helper(root,1);
         return ans;
     }
-    public static void helper(TreeNode root,int level){
+    public  void helper(TreeNode root,int level){
         if(root==null)return ;
-        if(level==ans.size()){
+        // if(level==ans.size()){
+        //     ans.add(root.val);
+        // }
+        if(level>maxLevel){
             ans.add(root.val);
+            maxLevel=level;
         }
         
         helper(root.right,level+1);
