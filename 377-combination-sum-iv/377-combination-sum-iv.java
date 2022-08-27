@@ -1,28 +1,22 @@
 class Solution {
-    public int combinationSum4(int[] nums, int target) {
-        int [] dp= new int[target+1];
-      
-        Arrays.fill(dp,-1);
-          dp[0]=1;
-        return helper(nums,target,dp);
+  private int[] dp;
+    int mod=(int)1e9+7;
+public int combinationSum4(int[] nums, int n) {
+    
+    dp = new int[n + 1];
+    Arrays.fill(dp,-1);
+   return helper(nums,n);
+}
+    public int helper(int [] nums,int n){
+        
+    if(n<0)return 0;
+    if(n==0)return 1;
+    if(dp[n]!=-1)return dp[n];
+    
+    dp[n]=0;
+    for( int i=0;i<nums.length;i++){
+        dp[n]=dp[n]+helper(nums,n-nums[i])%mod;
     }
-    public int helper( int [] arr,int tar,int[]dp){
-        if(dp[tar]!=-1){
-                return dp[tar];
-         }
-        int res=0;
-       for(int i=0;i<arr.length;i++){
-            if(arr[i]<=tar){
-                res+=helper(arr,tar-arr[i],dp);
-            }      
-            
-       
-       }
-        
-       dp[tar]=res;
-      return res;  
-        
-        
-        
+    return dp[n];
     }
 }
