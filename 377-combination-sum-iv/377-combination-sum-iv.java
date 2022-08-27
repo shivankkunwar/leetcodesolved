@@ -4,8 +4,9 @@ class Solution {
 public int combinationSum4(int[] nums, int n) {
     
     dp = new int[n + 1];
-    Arrays.fill(dp,-1);
-   return helper(nums,n);
+    //Arrays.fill(dp,-1);for hellper1
+    Arrays.sort(nums);
+   return helper2(nums,n);
 }
     public int helper(int [] nums,int n){
         
@@ -18,5 +19,18 @@ public int combinationSum4(int[] nums, int n) {
         dp[n]=dp[n]+helper(nums,n-nums[i])%mod;
     }
     return dp[n];
+    }
+    public int helper2(int nums[],int n){
+        if(n==0)return 1;
+        
+        dp[0]=1;
+        
+        for( int i=0;i<=n;i++){
+            for( int j=0;j<nums.length;j++){
+                if(nums[j]>i)break;
+                dp[i]=(dp[i]+dp[i-nums[j]]);
+            }
+        }
+        return dp[n];
     }
 }
