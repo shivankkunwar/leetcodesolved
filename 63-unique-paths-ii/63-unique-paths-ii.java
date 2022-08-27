@@ -1,33 +1,32 @@
 class Solution {
-    
+    public int [][] dp;
+    public int [][]dir=new int [][]{{1,0},{0,1}};
     public int uniquePathsWithObstacles(int[][] grid) {
         int m= grid.length;
         int n= grid[0].length;
+        dp= new int [m][n];
+    
+        return helper(grid,0,0,m,n);
         
-        if(grid[0][0]==1)return 0;
         
-        grid[0][0]=1;
+    }
+    public int helper(int [][] arr,int s,int e,int m,int n){
         
+        if(s>m-1||e>n-1)return 0;
+       
+        if(s==(m-1) && e==(n-1)&& arr[s][e]==0)return 1;
         
-        for( int i=1;i<m;i++){
-            grid[i][0]=(grid[i][0]==0&&grid[i-1][0]==1)?1:0;
+        if(dp[s][e]!=0)return dp[s][e];
+        
+       
+         if(arr[s][e]==1)
+             return 0;
+        else{
+             for( int i=0;i<dir.length;i++){
+            dp[s][e]=dp[s][e]+helper(arr,s+dir[i][0],e+dir[i][1],m,n);
         }
-        for( int j=1;j<n;j++){
-            grid[0][j]=(grid[0][j]==0&&grid[0][j-1]==1)?1:0;
         }
-        
-        for( int i=1;i<m;i++){
-            for( int j=1;j<n;j++){
-                if(grid[i][j]==0)
-                        grid[i][j]=grid[i-1][j]+grid[i][j-1];
-            
-                else
-                        grid[i][j]=0;
-            }
-        }
-        
-        return grid[m-1][n-1];
-        
-        
+       
+        return dp[s][e];
     }
 }
