@@ -18,26 +18,28 @@ class Node {
 */
 
 class Solution {
-    List<List<Integer>> result = new ArrayList<>();
-    
-    public void go(Node root,int level){
-        if(root==null) return;
-        
-        if(result.size()<level){
-            List<Integer> temp = new ArrayList<>();
-            temp.add(root.val);
-            result.add(temp);
-        }
-        else result.get(level-1).add(root.val);
-        
-        List<Node> child = root.children;
-        for(int i=0;i<child.size();i++){
-            go(child.get(i),level+1);
-        }
-    }
-    
+    List<List<Integer>> answer= new ArrayList<>();
     public List<List<Integer>> levelOrder(Node root) {
-        go(root,1);
-        return result;
+        if(root==null)return new ArrayList<>();
+        Queue<Node> q= new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            int sz= q.size();
+             ArrayList<Integer> mid= new ArrayList<>();
+            while(sz-->0){
+                Node curr=q.poll();
+                 mid.add(curr.val);
+               for(Node child:curr.children){
+                   q.add(child);
+                  
+               }
+            }
+            answer.add(mid);
+        }
+        
+        
+        
+        return answer;
+        
     }
 }
