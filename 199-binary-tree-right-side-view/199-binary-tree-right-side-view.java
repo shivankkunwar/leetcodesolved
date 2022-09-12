@@ -21,18 +21,16 @@ class Solution {
         helper(root,1);
         return ans;
     }
-    public  void helper(TreeNode root,int level){
-        if(root==null)return ;
-        // if(level==ans.size()){
-        //     ans.add(root.val);
-        // }
+    public void helper(TreeNode root,int level){
+        if(root==null)return;
         if(level>maxLevel){
             ans.add(root.val);
             maxLevel=level;
         }
-        
         helper(root.right,level+1);
         helper(root.left,level+1);
     }
+    
+        
     
 }
