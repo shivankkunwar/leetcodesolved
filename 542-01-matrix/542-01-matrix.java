@@ -2,49 +2,53 @@ class Solution {
     public int[][] updateMatrix(int[][] mat) {
         int n=mat.length;
         int m=mat[0].length;
-        Queue<Integer> q=new LinkedList<>();
-        int ans[][]= new int [n][m];
-        for(int i=0;i<n;i++ )
-            for(int j=0;j<m;j++){
+        int [][] ans= new int [n][m];
+        
+        int [][] dir= new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+        Queue<Integer> q= new LinkedList<>();
+        
+        for( int i=0;i<n;i++)
+        {
+            for( int j=0;j<m;j++){
+                
                 if(mat[i][j]==0){
-                    
-                    q.add(i*m+j);
-                    ans[i][j]=0;
+                        
+                        q.add(i*m+j);
+                        
                 }else{
-                    ans[i][j]=-1;
+
+                ans[i][j]=-1;
                 }
+            
             }
+        }
         int level=0;
-        int [][]dir= new int[][]{{-1,0},{1,0},{0,-1},{0,1}};
+        if(q.size()==0)return ans;
         
         while(!q.isEmpty()){
             
             int sz=q.size();
-            
-            while(sz-- >0){
-                
+            while(sz-->0){
                 int curr=q.poll();
-                int r=curr/m;
-                int c=curr%m;
+                int row=curr/m;
+                int col=curr%m;
                 
-                for(int k=0;k<dir.length;k++){
-                    int nr=r+dir[k][0];
-                    int nc=c+dir[k][1];
+                for( int i=0;i<dir.length;i++){
+                    int r=row+dir[i][0];
+                    int c=col+dir[i][1];
                     
-                    if(nr>=0 && nc>=0 && nc<m && nr<n&&ans[nr][nc]==-1){
-                            q.add(nr*m+nc);
-                            ans[nr][nc]=level+1;
+                    if(r>=0&&r<n&&c<m&&c>=0&&ans[r][c]==-1){
+
+                        q.add(r*m+c);
+                        ans[r][c]=level+1;
                     }
-                    
-                    
-                    
-                    
                 }
                 
+                    
             }
-            
-           level++; 
+            level++;
         }
+        
         return ans;
     }
    
