@@ -69,18 +69,14 @@ class Solution
 {
     //Function to reverse a linked list.
     Node reverseList(Node head)
-    {
-        Node curr=head;
-        
-        Node prev= null;
-        
-        while(curr!=null){
-            Node next=curr.next;
-            curr.next=prev;
-            prev=curr;
-            curr=next;
-        }
-        return prev;
+    { 
+        if(head==null||head.next==null)return head;
+        Node rest_head=reverseList(head.next);
+        Node rest_tail=head.next;
+
+        rest_tail.next=head;
+        head.next=null;
+        return rest_head;
         
     }
 }
