@@ -95,24 +95,21 @@ class Node
 class GfG
 {
     //Function to find the data of nth node from the end of a linked list.
-    int getNthFromLast(Node head, int n)
+    int getNthFromLast(Node head,int key)
     {
-    		int size=0;
-    		Node temp=head;
-    		while(temp!=null){
-    		    size++;
-    		    temp=temp.next;
-    		    
-    		}
-    	    if(size<n)return -1;
-    	    
-    		size=size-n;
-    		temp=head;
-    		while(size--!=0){
-    		    
-    		    temp=temp.next;
-    		   
-    		}
-    		return temp.data;
+    		if(head==null)return -1;
+            Node first=head;
+            Node second=head;
+
+            for(int i=0;i<key;i++){
+                if(first==null)return -1;
+                first=first.next;
+            }
+
+            while(first!=null){
+                second=second.next;
+                first=first.next;
+            }
+            return second.data;
     }
 }
