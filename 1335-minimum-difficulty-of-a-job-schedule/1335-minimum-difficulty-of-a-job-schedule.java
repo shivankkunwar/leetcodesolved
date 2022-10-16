@@ -1,35 +1,30 @@
 class Solution {
    
-          Integer[][] dp;
-    int n;
-    
-    public int Helper(int idx, int[] arr, int d){
-        
-        if(idx == n && d == 0)    return 0;
-        
-        if(n - idx < d) return (int)1e5;          // only for optimization not necessary
-        
-        if(d < 0)       return (int)1e5;
-        
-        if(dp[idx][d] != null)      return dp[idx][d];
-        
-        int max = 0;
-        int res = Integer.MAX_VALUE;
-        
-        for(int i = idx; i < n; ++i){
-            max = Math.max(arr[i], max);
-            res = Math.min(res, max + Helper(i + 1, arr, d - 1));
-        }
-    
-        return dp[idx][d] = res;
-    }
-    
+
+
     public int minDifficulty(int[] jobDifficulty, int d) {
-        this.n = jobDifficulty.length;
-		this.dp = new Integer[n][d + 1]; 
-		
-        if(n < d)   return -1;
-       
-        return Helper(0, jobDifficulty, d);
-    } 
+              int len = jobDifficulty.length;
+        if (d > len) return -1;
+        int[][] minDifficulty = new int[d][len];
+        for (int i = 1; i < d; i++) {
+            Arrays.fill(minDifficulty[i], Integer.MAX_VALUE);
+        }
+        int maxDifficulty = 0;
+        for (int i = 0; i <= len - d; i++) {
+            maxDifficulty = Math.max(maxDifficulty, jobDifficulty[i]);
+            minDifficulty[0][i] = maxDifficulty;
+        }
+        for (int day = 1; day < d; day++) {
+            for (int to = day; to <= len - d + day; to++) {
+                int currentDayDifficulty = jobDifficulty[to];
+                int result = Integer.MAX_VALUE;
+                for (int j = to - 1; j >= day - 1; j--) {
+                    result = Math.min(result, minDifficulty[day - 1][j] + currentDayDifficulty);
+                    currentDayDifficulty = Math.max(currentDayDifficulty, jobDifficulty[j]);
+                }
+                minDifficulty[day][to] = result;
+            }   
+        }
+        return minDifficulty[d - 1][len - 1];
+    }
     }
