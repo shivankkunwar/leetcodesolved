@@ -1,26 +1,38 @@
 class Solution {
     public List<String> topKFrequent(String[] words, int k) {
-       Map<String, Integer> map = new TreeMap<>();
-        for(int i = 0;i<words.length;i++){
-            map.put(words[i], map.getOrDefault(words[i], 0)+1);
-        }
-        List<String> res = new ArrayList<>();
-        while(k!=0){
-            String temp = "";
-            int siz = 0;
-            for(String s:map.keySet()){
-                if(map.get(s)>siz){
-                    siz = map.get(s);
-                    temp = s;
-                }
-            }
-            res.add(temp);
-            k--;
-            map.remove(temp);
-            if(map.size()==0) break;
-        }
-        return res;
+       
+        // map hold the word: counts
+        HashMap<String, Integer> map = new HashMap();
         
+        // sort the map by frequency high->low order, sort words lexi order
+        PriorityQueue<Map.Entry<String, Integer>> heap = new PriorityQueue<>(
+            (a,b)->{
+                if(a.getValue() != b.getValue())
+                    return a.getValue().compareTo(b.getValue());
+                return -a.getKey().compareTo(b.getKey());
+            }
+        );
+        
+        // fill the map
+        for(String word: words){
+            map.merge(word, 1, Integer::sum);
+        }
+        
+        // put into heap
+        for(Map.Entry<String, Integer> entry: map.entrySet()){
+            heap.offer(entry);
+            if(heap.size() > k)
+                heap.poll();
+        }
+        
+        // pop out the answer
+        List<String> ans = new ArrayList();
+        while(heap.size() > 0)
+            ans.add(heap.poll().getKey());
+        
+        // check the order
+        Collections.reverse(ans);
+        return ans;
         
     }
 }
