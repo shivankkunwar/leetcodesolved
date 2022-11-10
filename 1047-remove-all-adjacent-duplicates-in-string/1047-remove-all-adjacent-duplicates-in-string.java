@@ -17,13 +17,12 @@ class Solution {
             }
         }
        
-        String ans="";
-        while(!stack.isEmpty())
-        {
-            ans=stack.pop()+ans;
+       
+         StringBuilder ns = new StringBuilder("");
+        while(!stack.isEmpty()){
+            ns.append(stack.pop());
         }
-          return ans;
-        }
-        
+        return ns.reverse().toString();
     
     }
+}
